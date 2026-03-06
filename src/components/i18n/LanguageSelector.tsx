@@ -70,14 +70,14 @@ export default function LanguageSelector() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-2 sm:px-3 sm:py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        className="flex items-center space-x-2 p-2 rounded-md bg-foreground/10 hover:bg-foreground/20 transition-colors"
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label={t('language')}
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
-          className="h-5 w-5 text-gray-600 dark:text-gray-300" 
+          className="h-5 w-5" 
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor"
@@ -89,12 +89,12 @@ export default function LanguageSelector() {
             d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" 
           />
         </svg>
-        <span className={`hidden sm:inline text-sm font-medium text-gray-700 dark:text-gray-200 ${isPending ? 'opacity-50' : ''}`}>
+        <span className={`hidden sm:inline ${isPending ? 'opacity-50' : ''}`}>
           {getLanguageName(currentLocale)}
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg" 
-          className={`hidden sm:inline h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`hidden sm:inline h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor"
@@ -104,7 +104,7 @@ export default function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
+        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-background border border-border z-50">
           <div className="py-1" role="menu" aria-orientation="vertical">
             {locales.map((locale) => ( // Use the defined locales array
               <button
@@ -113,8 +113,8 @@ export default function LanguageSelector() {
                 disabled={isPending} // Disable while transitioning
                 className={`block w-full text-left px-4 py-2 text-sm ${
                   currentLocale === locale
-                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold' // Highlight current
-                    : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-foreground/20 font-semibold'
+                    : 'hover:bg-foreground/10'
                 } ${isPending ? 'cursor-not-allowed opacity-70' : ''}`}
                 role="menuitem"
               >

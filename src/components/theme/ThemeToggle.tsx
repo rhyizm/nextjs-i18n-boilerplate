@@ -2,16 +2,16 @@
 
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const t = useTranslations('common');
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   
   if (!mounted) {
     return (
@@ -20,7 +20,6 @@ export default function ThemeToggle() {
         aria-label={t('toggle_theme')}
       >
         <div className="w-5 h-5" />
-        {/* Hide label on small screens to be icon-only */}
         <span className="ml-2 hidden sm:inline">{t('toggle_theme')}</span>
       </button>
     );
@@ -68,7 +67,6 @@ export default function ThemeToggle() {
           />
         </svg>
       )}
-      {/* Hide label on small screens to be icon-only */}
       <span className="ml-2 hidden sm:inline">{t('toggle_theme')}</span>
     </button>
   );

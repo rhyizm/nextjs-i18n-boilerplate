@@ -10,15 +10,13 @@ export default function UserMenu() {
   const t = useTranslations();
   const { data: session, status } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [pendingPath, setPendingPath] = useState<string | null>(null);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const iconButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-
-  useEffect(() => {
-    setLoading(false);
-  }, [pathname]);
+  const loading = isSigningOut || (pendingPath !== null && pathname !== pendingPath);
 
   // Close dropdown when clicking outside menu and icon button
   useEffect(() => {
@@ -48,9 +46,14 @@ export default function UserMenu() {
   }
 
   const handleSignOut = async () => {
-    setLoading(true);
-    await signOut({ redirect: false });
-    router.push('/');
+    try {
+      setPendingPath('/');
+      setIsSigningOut(true);
+      await signOut({ redirect: false });
+      router.push('/');
+    } finally {
+      setIsSigningOut(false);
+    }
   };
 
   return (
@@ -91,7 +94,12 @@ export default function UserMenu() {
               </div>
               <Link
                 href="/settings"
-                onClick={() => { setIsDropdownOpen(false); if (pathname !== '/settings') setLoading(true); }}
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  if (pathname !== '/settings') {
+                    setPendingPath('/settings');
+                  }
+                }}
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 {t('common.settings')}
