@@ -11,7 +11,7 @@ const handleI18nRouting = createMiddleware({
   localePrefix: 'as-needed' // 必要なときだけ /en プレフィックスを付与
 });
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // next-intl でルーティング／リダイレクトを決定
   return handleI18nRouting(request);
 }
